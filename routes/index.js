@@ -12,6 +12,11 @@ router.get('/login', function(req, res, next) {
   next();
 });
 
+router.get('/register', function(req, res, next) {
+  res.render('customer/register', { title: 'Express' });
+  next();
+});
+
 router.get('/cartdetail', (req,res,next)=>{
   res.render('customer/blank');
   next();
