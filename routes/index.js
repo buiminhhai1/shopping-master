@@ -12,9 +12,23 @@ router.get('/login', function(req, res, next) {
   next();
 });
 
-router.get('/blank', (req,res,next)=>{
+router.get('/cartdetail', (req,res,next)=>{
   res.render('customer/blank');
   next();
 })
 
+router.get('/checkout', (req,res,next)=>{
+  res.render('customer/checkout');
+  next();
+})
+
+router.get('/store', (req,res,next)=>{
+  res.render('customer/store');
+  next();
+})
+
+router.get('/product', (req,res,next) =>{
+  res.render('customer/product');
+  next();
+})
 module.exports = router;
