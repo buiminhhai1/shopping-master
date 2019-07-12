@@ -1,6 +1,11 @@
 (function($) {
 	"use strict"
 
+
+	$('.add-to-cart-btn').on('click', function (e) {
+		alert("add to cart successfully");
+	})
+
 	// Mobile Nav toggle
 	$('.menu-toggle > a').on('click', function (e) {
 		e.preventDefault();

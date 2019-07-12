@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+var mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
@@ -12,6 +12,23 @@ var adminRouter = require('./routes/admin');
 var app = express();
 
 
+var uri = "mongodb+srv://admin:admin@cluster0-hs8pp.mongodb.net/ShoppingDB";
+mongoose.connect(uri, {useNewUrlParser: true});
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("database connected");
+});
+
+
+// //test write to database
+// db.collection("User").insert(  {id : "1"} 
+
+//     , function(err, result) {
+//     if (err) throw err;
+//     console.log(result);
+//     db.close();
+//   });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
