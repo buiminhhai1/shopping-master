@@ -1,0 +1,18 @@
+<script src="/admin/template/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/admin/template/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/admin/template/bower_components/chart.js/Chart.js"></script>
+<script src="/admin/template/bower_components/fastclick/lib/fastclick.js"></script>
+<script src="/admin/template/dist/js/adminlte.min.js"></script>
+<script src="/admin/template/dist/js/demo.js"></script>
+<script>
+  $(document).ready(function() {
+
+   var docHeight = $(window).height();
+   var footerHeight = $('.main-footer').height();
+   var footerTop = $('.main-footer').position().top + footerHeight;
+
+   if (footerTop < docHeight) {
+    $('.main-footer').css('margin-top', 10+ (docHeight - footerTop) + 'px');
+   }
+  });
+ </script>
