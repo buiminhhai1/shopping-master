@@ -35,10 +35,6 @@ router.get('/store', (req,res,next)=>{
 router.get('/product', (req,res,next) =>{
   res.render('customer/product');
   next();
-})
-
-
-
-
+});
 
 module.exports = router;

@@ -17,7 +17,7 @@ mongoose.connect(uri, {useNewUrlParser: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-  console.log("database connected");
+  console.log("database connected, the application listening on port 3003");
 });
 
 

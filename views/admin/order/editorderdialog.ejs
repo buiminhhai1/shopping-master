@@ -1,0 +1,47 @@
+		  
+	<div class="modal fade my-temp-dialog" id="my-order-dialog-edit" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Cập nhật thông tin hóa đơn</h2>
+				</div>
+				<form action ="/admin/orders" method="post">
+				<div class="modal-body ">
+
+					<div class="form-row">
+						<div class="col-md-12">
+						  <label for="new-order-address">Mã hoá đơn</label>
+						  <input type="text" class="form-control" id="new-order-ordernumber" value="" name ="OrderNumber" />
+						</div>
+					</div>
+					
+					<div class="form-row">
+						<div class="col-md-12">
+						  <label for="new-order-address">Trạng thái đơn hàng</label>
+						  <input type="text" class="form-control" id="new-order-state" value="" name ="state" />
+						</div>
+					</div>
+								
+					
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default btn-primary" type="submit" >Cập nhật</button>
+					<!-- <button class="btn btn-default btn-danger" type="button" onclick="deleteUser()">Xóa</button> -->
+					<button class='btn btn-default btn-dark' type ='button' data-dismiss="modal">Hủy bỏ</button>
+				</div>
+			</form>
+				<script>
+					function updateUserDetail(){
+						alert("Thông tin hóa đơn đã được cập nhật");
+					}
+					function deleteUser(){
+						alert("Hóa đơn đã bị xóa ra khỏi cở sở dữ liệu");
+					}
+					
+				</script>
+			</div>
+		
+		</div>
+
+	</div>
+				

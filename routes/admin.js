@@ -7,7 +7,7 @@ var router = express.Router();
 // });
 
 router.get('/', function(req, res, next) {
-  res.render('admin/charts/charts', { title: 'Express' });
+  res.render('admin/user/userlist');
   next();
 });
 
