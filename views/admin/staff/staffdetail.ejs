@@ -1,104 +1,79 @@
+
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en">
 
-<head>
-     <%include ../header %>
-</head>
+  <%include ../head%>
 
-<body class="layout layout-vertical layout-left-navigation layout-above-toolbar layout-above-footer">
-    <main>
-      
-		  <div id="wrapper">
-            <%include ../sidebar%>
+  <body>
+   
+    <div class="page-wrapper chiller-theme toggled">
+      <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+        <i class="fas fa-bars"></i>
+      </a>
+      <%include ../sidebar%>
 
-			<%include editstaffdialog%>
-          <div class="content-wrapper">
-                <div class="content custom-scrollbar ps ps--active-y">
-                    <div >
-                        <!-- HEADER -->
-                        <div class="text-auto row no-gutters align-items-center justify-content-between p-6">
-
-                            <div class="row no-gutters align-items-center">
-                                <div >
-                                    <img  src="<%=user.ImageAvatar%>" height = "200px" width = "150px"/>
-                                </div>
-                                <h3 class="my-name-user"><%=user.DisplayName%></h3>
-                            </div>
-                         <button type="button" class="btn btn-primary my-button" data-toggle="modal" data-target="#my-staff-dialog" onclick = "myfunction()">
-						 Cập nhật thông tin 	
-						 </button>
-                        </div>
-                        <!-- / HEADER -->
-
-			
-						<div class="container">
-						  <div class="row">
-							<div class="col-sm-10">
-							  <form class="my-form">
-								
-								<div id="gender-user">
-									<h5><i class="fa icon-gender-transgender"></i>Giới tính: <%=user.Gender%></h5>
-								</div>
-								
-								<div id="date-birth-user">
-									<h5 ><i class="fa fa-calendar"></i> Ngày sinh: <%=user.DateOfBirth%></h5>
-								</div>
-								
-								<div id="phone-user">
-									<h5><i class="fa fa-phone"></i>Điện thoại: <%=user.Phone%></h5>
-								</div>
-								<div id="email-user">
-									<h5><i class="fa fa-info"></i>Email: <%=user.Email%></h5>
-								</div>
-												
-								<div id="address-user">
-									<h5><i class="fa fa-location-arrow"></i>Địa chỉ: <%=user.Address%></h5>
-								</div>
-										
-								<div id="role-user">
-									<h5><i class="fa icon-account-card-details"></i>Ngày đăng ký: <%=user.DateContact%></h5>
-								
-								</div>
-
-								<div id="info-user">
-									<h5><i class="fa  icon-details"></i>Vai trò: <%=user.Role%></h5>
-								
-								</div>
-
-								<div id="info-user">
-									<h5><i class="fa  icon-details"></i>Thông tin thêm: <%=user.MoreInfo%></h5>
-								
-								</div>
-							</form>
-						
-							</div>
-							<div class="col-sm-1">  
-							</div>
-							
-						  </div>
-						</div>
-						</div>
-
-                    <script type="text/javascript">
-                    	
-                    		function myfunction(){
-              $('#edit-user-id').attr('value','<%=user._id%>');
-              $('#edit-user-displayname').attr('value','<%=user.DisplayName%>');
-              $('#edit-user-email').attr('value','<%=user.Email%>');
-              $('#edit-user-birthday').attr('value','<%=user.DateOfBirth%>');
-              $('#edit-user-gender').attr('value','<%=user.Gender%>');
-              $('#edit-user-avatar').attr('value','<%=user.ImageAvatar%>');
-              $('#edit-user-address').attr('value','<%=user.Address%>');
-              $('#edit-user-datecontact').attr('value','<%=user.DateContact%>');
-              $('#edit-user-phone').attr('value','<%=user.Phone%>');
-          }
-                    </script>
-
-                <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 471px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 325px;"></div></div></div>
+      <main class="page-content">
+          
+        <div class="container-fluid">
+          <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+          
+              <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                  <a class="navbar-brand" href="#">Chi tiết staff</a>
+                  <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    
+                  </ul>
+                  <form class="form-inline my-2 my-lg-0">
+                      <a class="btn btn-outline-danger my-2 my-sm-0" href="/">Logout</a>
+                  </form>
+              </div>
+          </nav>
+          <hr>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <p>This is a responsive sidebar template with dropdown menu based on bootstrap 4 framework.</p>
+              <p> You can find the complete code on <a href="https://github.com/azouaoui-med/pro-sidebar-template" target="_blank">
+                  Github</a>, it contains more themes and background image option</p>
             </div>
-		</div>
-		  
-	</main>	
-</body>
-	
+            <div class="form-group col-md-12">
+              <iframe src="https://ghbtns.com/github-btn.html?user=azouaoui-med&repo=pro-sidebar-template&type=star&count=true&size=large"
+                frameborder="0" scrolling="0" width="140px" height="30px"></iframe>
+              <iframe src="https://ghbtns.com/github-btn.html?user=azouaoui-med&repo=pro-sidebar-template&type=fork&count=true&size=large"
+                frameborder="0" scrolling="0" width="140px" height="30px"></iframe>
+            </div>
+          </div>
+          <h5>More templates</h5>
+          <hr>
+            <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">          
+              <div class="card rounded-0 p-0 shadow-sm">
+                <img src="https://user-images.githubusercontent.com/25878302/58369568-a49b2480-7efc-11e9-9ca9-2be44afacda1.png" class="card-img-top rounded-0" alt="Angular pro sidebar">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Angular Pro Sidebar</h6>
+                    <a href="https://github.com/azouaoui-med/angular-pro-sidebar" target="_blank" class="btn btn-primary btn-sm">Github</a>
+                    <a href="https://azouaoui-med.github.io/angular-pro-sidebar/demo/" target="_blank" class="btn btn-success btn-sm">Preview</a>
+                </div>
+              </div>          
+            </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">          
+              <div class="card rounded-0 p-0 shadow-sm">
+                <img src="https://user-images.githubusercontent.com/25878302/58369258-33f20900-7ef8-11e9-8ff3-b277cb7ed7b4.PNG" class="card-img-top rounded-0" alt="Angular pro sidebar">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Angular Dashboard</h6>
+                    <a href="https://github.com/azouaoui-med/lightning-admin-angular" target="_blank" class="btn btn-primary btn-sm">Github</a>
+                    <a href="https://azouaoui-med.github.io/lightning-admin-angular/demo/" target="_blank" class="btn btn-success btn-sm">Preview</a>
+                </div>
+              </div>          
+            </div>
+          </div>
+        </div>
+
+      </main>
+    
+    </div>
+
+  </body>
+
 </html>
