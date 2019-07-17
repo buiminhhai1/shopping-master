@@ -117,6 +117,19 @@ app.put("/admin/supplier/:id", (req,res) =>{
     }
   });
 });
+
+app.delete("/admin/supplier/:id", (req,res) =>{
+  // get primary key of supplier
+  const supplierID = req.params.id;
+  // find Docment by Id and delete document from record
+  db.collection("Supplier").findOneAndDelete({_id: getPrimaryKey(supplierID)},
+  (err,result) => {
+    if(err)
+      console.log("err delete is " + err)
+      else 
+      res.json(result);
+  });
+});
 ////
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
