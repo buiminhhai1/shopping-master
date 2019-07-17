@@ -8,8 +8,20 @@ var mongoose = require('mongoose');
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
 
-
+// try to create new schema
+const ObjectID = require("mongodb").ObjectID;
+const joi = require("joi");
+const bodyParser = require("body-parser");
 var app = express();
+app.use(bodyParser.json());
+
+const supplier = joi.object().keys({
+  displayName: joi.string().required(),
+  email: joi.string().required(),
+  phone: joi.string(),
+  address: joi.string()
+});
+/////
 
 
 var uri = "mongodb+srv://admin:admin@cluster0-hs8pp.mongodb.net/ShoppingDB";
@@ -43,6 +55,69 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/admin', adminRouter);
 
+//// try to create supplier
+
+const getPrimaryKey = (_id) => ObjectID(_id);
+// render view and show data
+app.get("/admin/supplier", (req,res,next) =>{
+  res.render("admin/supplier/supplierlist");
+});
+// read
+app.get("/admin/getSupplier", (req,res) =>{
+  db.collection("Supplier").find({}).toArray((err,documents) =>{
+    if(err){
+      console.log("error get supplier " + err);
+    } else {
+      res.json(documents);
+    }
+  });
+})
+// Create supplier
+app.post("/admin/supplier",(req,res,next) =>{
+    
+    const objSupplier = req.body;
+  
+    joi.validate(objSupplier,supplier, (err,result) =>{
+      if(err){
+        const error = new Error("Invalid Input");
+        error.status = 400;
+        next(error);
+      }else{
+        db.collection("Supplier").insertOne(objSupplier,(err,result)=> {
+          if(err){
+            const error = new Error("failed to insert supplier document");
+            error.status = 400;
+            next(error);
+          }else {
+            res.json({result: result, document: result.ops[0], msg: "Success to insert suppier"});
+            console.log("create supplier docment success");
+            next();
+
+          }
+        })
+      }
+    })
+});
+// Update supplier 
+app.put("/admin/supplier/:id", (req,res) =>{
+  const supplierID = req.params.id;
+
+  const supplierInput = req.body;
+  
+  // Find document by Id and Update 
+  db.collection("Supplier").findOneAndUpdate({_id: getPrimaryKey(supplierID)},
+  {$set: {displayName: supplierInput.displayName, email: supplierInput.email, phone: supplierInput.phone, address: supplierInput.address}},
+  {returnOriginal: false}, 
+  (err,result) =>{
+    if(err){
+      console.log("update error " + err);
+    }else {
+
+      res.json(result);
+    }
+  });
+});
+////
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
