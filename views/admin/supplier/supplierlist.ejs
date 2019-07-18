@@ -83,7 +83,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button class="btn btn-default btn-primary" type="submit" >Tạo mới</button>
+                                <button class="btn btn-default btn-primary closemodal" type="submit" >Tạo mới</button>
                                 <button class='btn btn-default btn-dark' id="closemodal" type ='button' data-dismiss="modal">Hủy bỏ</button>
                             </div>
     
@@ -148,6 +148,11 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
         <script>
             $(document).ready(() =>{
+
+                $('.closemodal').on('click',()=>{
+                    $('#my-supplier-dialog-new').modal('toggle');
+                    $(".modal-backdrop").remove();
+                })
                
                 const display = $("#display") ;
                 const form = $("#form");
