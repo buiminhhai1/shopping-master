@@ -148,29 +148,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
         <script>
             $(document).ready(() =>{
-                $("#add").on("click",function() {
-                    $("#container-test-form").show();
-                    $(".container").hide();
-                });     
-                
-                $(".test-form").click(function(e){
-                    e.stopPropagation(); 
-                })
-
-                $("#add").click(function(e){
-                    e.stopPropagation(); 
-                })
-                
-                $("body").click(function(){
-                    $("#container-test-form").hide();
-                    $(".container").show();
-                })
-                $(".btn-cancel").click(function(){
-                    $("#container-test-form").hide();
-                    $(".container").show();
-                })
-                
-
+               
                 const display = $("#display") ;
                 const form = $("#form");
                 const nameUserInput = $("#nameUserInput");
@@ -179,7 +157,7 @@
                 const addressUserInput = $("#addressUserInput");
                 const closemodal = $("#closemodal");
                 
-                const close = $("#temp");
+                const modal = $("#my-supplier-dialog-new");
                 const getSupplier = () => {
                     fetch("/admin/getSupplier", {method: "get"})
                         .then(response => response.json())
@@ -252,6 +230,8 @@
                                 deleteSupplier(data.document,ids);
                             } 
                        }
+                       modal.removeAttr("z-index");
+                       modal.display(none);
                        closemodal.trigger("click");
                        //resetSupplierInput();
                        
