@@ -1,79 +1,194 @@
-
 <!DOCTYPE html>
-<html lang="en">
-
-  <%include ../head%>
-
-  <body>
-   
-    <div class="page-wrapper chiller-theme toggled">
-      <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
-        <i class="fas fa-bars"></i>
-      </a>
-      <%include ../sidebar%>
-
-      <main class="page-content">
-          
-        <div class="container-fluid">
-          <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-              </button>
-          
-              <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                  <a class="navbar-brand" href="#">Danh sách nhà cung cấp</a>
-                  <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    
-                  </ul>
-                  <form class="form-inline my-2 my-lg-0">
-                      <a class="btn btn-outline-danger my-2 my-sm-0" href="/">Logout</a>
-                  </form>
-              </div>
-          </nav>
-          <hr>
-          <div class="row">
-            <div class="form-group col-md-12">
-              <p>This is a responsive sidebar template with dropdown menu based on bootstrap 4 framework.</p>
-              <p> You can find the complete code on <a href="https://github.com/azouaoui-med/pro-sidebar-template" target="_blank">
-                  Github</a>, it contains more themes and background image option</p>
-            </div>
-            <div class="form-group col-md-12">
-              <iframe src="https://ghbtns.com/github-btn.html?user=azouaoui-med&repo=pro-sidebar-template&type=star&count=true&size=large"
-                frameborder="0" scrolling="0" width="140px" height="30px"></iframe>
-              <iframe src="https://ghbtns.com/github-btn.html?user=azouaoui-med&repo=pro-sidebar-template&type=fork&count=true&size=large"
-                frameborder="0" scrolling="0" width="140px" height="30px"></iframe>
-            </div>
-          </div>
-          <h5>More templates</h5>
-          <hr>
-            <div class="row">
-            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">          
-              <div class="card rounded-0 p-0 shadow-sm">
-                <img src="https://user-images.githubusercontent.com/25878302/58369568-a49b2480-7efc-11e9-9ca9-2be44afacda1.png" class="card-img-top rounded-0" alt="Angular pro sidebar">
-                <div class="card-body text-center">
-                    <h6 class="card-title">Angular Pro Sidebar</h6>
-                    <a href="https://github.com/azouaoui-med/angular-pro-sidebar" target="_blank" class="btn btn-primary btn-sm">Github</a>
-                    <a href="https://azouaoui-med.github.io/angular-pro-sidebar/demo/" target="_blank" class="btn btn-success btn-sm">Preview</a>
-                </div>
-              </div>          
-            </div>
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">          
-              <div class="card rounded-0 p-0 shadow-sm">
-                <img src="https://user-images.githubusercontent.com/25878302/58369258-33f20900-7ef8-11e9-8ff3-b277cb7ed7b4.PNG" class="card-img-top rounded-0" alt="Angular pro sidebar">
-                <div class="card-body text-center">
-                    <h6 class="card-title">Angular Dashboard</h6>
-                    <a href="https://github.com/azouaoui-med/lightning-admin-angular" target="_blank" class="btn btn-primary btn-sm">Github</a>
-                    <a href="https://azouaoui-med.github.io/lightning-admin-angular/demo/" target="_blank" class="btn btn-success btn-sm">Preview</a>
-                </div>
-              </div>          
-            </div>
-          </div>
-        </div>
-
-      </main>
+<html>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
-    </div>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+        <title>CRUD Supplier demo</title>       
+    </head>
 
-  </body>
+    <body>
+       <div class="container">
+            <div class="row">
+                <div class="col-lg-1"></div>
+                <div class="col-lg-10">
+                    <form id="form">
+                        <div class="form-group">
+                            <label for="todo">Supplier</label>
+                            <input type="text" class="form-control" id="nameUserInput" placeholder="displayName">
+                            <input type="text" class="form-control" id="emailUserInput" placeholder="email">
+                            <input type="text" class="form-control" id="phoneUserInput" placeholder="phone">
+                            <input type="text" class="form-control" id="addressUserInput" placeholder="address">
+                            <br/>
+                            <button type="submit" class="btn btn-primary">Create</button>
+                        </div>
+                        
+                    </form>
+                </div>
+                <div class="col-lg-1"></div>
+            </div>
 
+            <div class="row">
+                <div class="col-lg-1"></div>
+                <div class="col-lg-10">
+                    <ul class="list-group" id="display">
+                    
+                    </ul>
+                </div>
+                <div class="col-lg-1"></div>
+            </div> 
+            <br>
+            <div class="row">
+                <div class="col-lg-1"></div>
+                <div class="col-lg-10">
+                    <div class="alert" role="alert" id="message">
+                        
+                    </div>
+                </div>
+                <div class="col-lg-1"></div>
+            </div>   
+       </div>
+       <!-- Optional JavaScript -->
+       <!-- JQuery First, then Popper.js, then Bootstrap Js-->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(() =>{
+                const display = $("#display") ;
+                const form = $("#form");
+                const nameUserInput = $("#nameUserInput");
+                const emailUserInput = $("#emailUserInput");
+                const phoneUserInput = $("#phoneUserInput");
+                const addressUserInput = $("#addressUserInput");
+               
+                const getSupplier = () => {
+                    fetch("/admin/getSupplier", {method: "get"})
+                        .then(response => response.json())
+                        .then(data =>{
+                            displaySupplier(data);
+                        });
+                }
+
+               getSupplier();
+
+               const buildTemplate = (supplier, ids) =>{
+                   return `
+                    <li class ="list-group-item" id ="${ids.listItemID}">
+                        <div class = "row">
+                            <div class = "col-md-3" id = "${ids.supplierID}">${supplier.displayName}</div> 
+                            <div class="col-md-3" id="${ids.emailphone}">${supplier.email}, ${supplier.phone}</div>
+                            <div class="col-md-3" id="${ids.address}">${supplier.address}</div>
+                            <div class="col-md-3 text-right">
+                                <button type="button" class="btn btn-secondary" id="${ids.editID}">Edit</button>
+                                <button type="button" class="btn btn-danger" id="${ids.deleteID}">Delete</button>
+                            </div>
+                        </div>
+                    </li>
+                   `;
+               }
+
+               const buildIDS = (supplier) => {
+                   return {
+                       listItemID: "listItem_" + supplier._id,
+                       supplierID: "supplier_" + supplier._id,
+                       emailphone: "emailphone_" + supplier._id,
+                       address: "address_" + supplier._id,
+                       editID: "edit_" + supplier._id,
+                       deleteID: "delete_" + supplier._id
+                   }
+               }
+
+               const displaySupplier = (data) => {
+                   data.forEach((supplier) => {
+                        let ids = buildIDS(supplier);
+                        display.append(buildTemplate(supplier,ids));
+                        editSupplier(supplier, ids);
+                        deleteSupplier(supplier, ids);
+                   });
+               }
+
+               resetSupplierInput = () =>{ 
+                   nameUserInput.val('');
+                   emailUserInput.val('');
+                   phoneUserInput.val('');
+                   addressUserInput.val('');
+                }
+
+               form.submit((e) =>{
+                   e.preventDefault();
+                   fetch("/admin/supplier", {
+                       method: 'post',
+                       body: JSON.stringify({displayName: nameUserInput.val(),email: emailUserInput.val(), phone: phoneUserInput.val(), address: addressUserInput.val()}),
+                       headers: {"Content-Type": "application/json; charset=utf-8"}
+                   })
+                   .then((response) =>{
+                       return response.json();
+                   })
+                   .then(data =>{
+                       if(!data.error){
+                           if(data.result.ok == 1 && data.result.n == 1){
+                                let ids = buildIDS(data.document);
+                                display.append(buildTemplate(data.document,ids));
+                                editSupplier(data.document,ids);
+                                deleteSupplier(data.document,ids);
+                            } 
+                       }
+                       resetSupplierInput();
+                   });
+               });
+
+               const editSupplier = (supplier, ids) => {
+                let editBtn = $(`#${ids.editID}`);
+                editBtn.click(()=>{
+                    fetch(`/admin/supplier/${supplier._id}`,{
+                        method: "put",
+                        headers: {"Content-Type": "application/json; charset=utf-8"},
+                        body: JSON.stringify({
+                            displayName: nameUserInput.val(),
+                            email: emailUserInput.val(),
+                            phone: phoneUserInput.val(),
+                            address: addressUserInput.val()
+                        })
+                    }).then((response)=>{
+                        return response.json();
+                    }).then((data)=>{
+                        if(data.ok == 1){
+                            let supplierIndex = $(`#${ids.supplierID}`);
+                            supplierIndex.html(data.value.displayName);
+                            let emailphone = $(`#${ids.emailphone}`);
+                            emailphone.html(data.value.email + ", " + data.value.phone);
+                            let phone = $(`#${ids.address}`);
+                            phone.html(data.value.address);
+                            resetSupplierInput();
+                           // get messsage here
+                        }else{
+                         // get message here
+                        }
+                    });
+                });
+               }
+
+
+               const deleteSupplier = (supplier, ids) =>{
+                   let deleteBtn = $(`#${ids.deleteID}`);
+                   deleteBtn.click(() => {
+                        fetch(`/admin/supplier/${supplier._id}`,{
+                            method: "delete"
+                        }).then(response =>{
+                            return response.json();
+                        }).then(data => {
+                            if(data.ok == 1){
+                                $(`#${ids.listItemID}`).remove();
+                            }
+                        });
+                   });
+               }
+            });
+        </script>
+    </body>
 </html>
