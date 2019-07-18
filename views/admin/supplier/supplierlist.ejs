@@ -8,30 +8,88 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     
-        <title>CRUD Supplier demo</title>       
+    <title>CRUD Supplier demo</title>       
+    <style>
+        #container-test-form{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            opacity: 0.8;
+            z-index: 1111;
+            display: none;
+        }
+        label {
+            background-color:#FEFFED;
+            padding:20px 35px;
+            margin:-10px -50px;
+            text-align:center;
+            border-radius:10px 10px 0 0
+    }
+        hr {
+        margin:10px -50px;
+        border:0;
+        border-top:1px solid #ccc
+        }
+        input[type=text] {
+        width:82%;
+        padding:10px;
+        margin-top:30px;
+        border:1px solid #ccc;
+        padding-left:40px;
+        font-size:16px;
+        font-family:raleway
+        }
+
+        .test-form{
+            position:absolute;
+            left:50%;
+            top:17%;
+            margin-left:-202px;
+            font-family:'Raleway',sans-serif
+        }
+        #form{
+            max-width:300px;
+            min-width:250px;
+            padding:10px 50px;
+            border:2px solid gray;
+            border-radius:10px;
+            font-family:raleway;
+            background-color:#fff
+
+        }
+
+    </style>
     </head>
 
     <body>
-       <div class="container">
-            <div class="row">
-                <div class="col-lg-1"></div>
-                <div class="col-lg-10">
-                    <form id="form">
-                        <div class="form-group">
-                            <label for="todo">Supplier</label>
-                            <input type="text" class="form-control" id="nameUserInput" placeholder="displayName">
-                            <input type="text" class="form-control" id="emailUserInput" placeholder="email">
-                            <input type="text" class="form-control" id="phoneUserInput" placeholder="phone">
-                            <input type="text" class="form-control" id="addressUserInput" placeholder="address">
-                            <br/>
-                            <button type="submit" class="btn btn-primary">Create</button>
-                        </div>
-                        
-                    </form>
-                </div>
-                <div class="col-lg-1"></div>
-            </div>
 
+        <div id="container-test-form">
+                <div class="row test-form">
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-10">
+                            <form id="form">
+                                <div class="form-group">
+                                    <label for="todo">Supplier</label>
+                                    <hr>
+                                    <input type="text" class="form-control" id="nameUserInput" placeholder="displayName">
+                                    <input type="text" class="form-control" id="emailUserInput" placeholder="email">
+                                    <input type="text" class="form-control" id="phoneUserInput" placeholder="phone">
+                                    <input type="text" class="form-control" id="addressUserInput" placeholder="address">
+                                    <br/>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button  class="btn btn-primary btn-cancel">Cancel</button>
+                                </div>
+                                
+                            </form>
+                        </div>
+                        <div class="col-lg-1"></div>
+                    </div>
+        
+        </div>
+
+       <div class="container">
+            
             <div class="row">
                 <div class="col-lg-1"></div>
                 <div class="col-lg-10">
@@ -51,7 +109,9 @@
                 </div>
                 <div class="col-lg-1"></div>
             </div>   
-       </div>
+            <button id="add" class="btn btn-primary">Add</button>
+       
+        </div>
        <!-- Optional JavaScript -->
        <!-- JQuery First, then Popper.js, then Bootstrap Js-->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -59,6 +119,29 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
         <script>
             $(document).ready(() =>{
+                $("#add").on("click",function() {
+                    $("#container-test-form").show();
+                    $(".container").hide();
+                });     
+                
+                $(".test-form").click(function(e){
+                    e.stopPropagation(); 
+                })
+
+                $("#add").click(function(e){
+                    e.stopPropagation(); 
+                })
+                
+                $("body").click(function(){
+                    $("#container-test-form").hide();
+                    $(".container").show();
+                })
+                $(".btn-cancel").click(function(){
+                    $("#container-test-form").hide();
+                    $(".container").show();
+                })
+                
+
                 const display = $("#display") ;
                 const form = $("#form");
                 const nameUserInput = $("#nameUserInput");
