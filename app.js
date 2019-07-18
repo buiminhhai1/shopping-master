@@ -16,8 +16,8 @@ var app = express();
 app.use(bodyParser.json());
 
 const supplier = joi.object().keys({
-  displayName: joi.string().required(),
-  email: joi.string().required(),
+  displayName: joi.string(),
+  email: joi.string(),
   phone: joi.string(),
   address: joi.string()
 });
@@ -90,11 +90,9 @@ app.post("/admin/supplier",(req,res,next) =>{
             next(error);
           }else {
             res.json({result: result, document: result.ops[0], msg: "Success to insert suppier"});
-            console.log("create supplier docment success");
-            next();
-
+            console.log("create supplier docment success");      
           }
-        })
+        });
       }
     })
 });
@@ -112,7 +110,6 @@ app.put("/admin/supplier/:id", (req,res) =>{
     if(err){
       console.log("update error " + err);
     }else {
-
       res.json(result);
     }
   });

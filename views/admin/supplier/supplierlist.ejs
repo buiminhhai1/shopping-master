@@ -65,24 +65,7 @@
                 const emailUserInput = $("#emailUserInput");
                 const phoneUserInput = $("#phoneUserInput");
                 const addressUserInput = $("#addressUserInput");
-                const message = $("#message");
-                message.hide();
-                
-                const displayMessage = (flag, msg) => {
-                    // successful
-                    if(flag){
-                        message.removeClass('alert-danger');
-                        message.addClass('alert-success');
-                        message.html(msg);
-                        message.show();
-                    }else {
-                        message.removeClass('alert-success');
-                        message.addClass('alert-danger');
-                        message.html(msg);
-                        message.show();
-                    }
-                }
-
+               
                 const getSupplier = () => {
                     fetch("/admin/getSupplier", {method: "get"})
                         .then(response => response.json())
@@ -140,8 +123,7 @@
                    e.preventDefault();
                    fetch("/admin/supplier", {
                        method: 'post',
-                       body: JSON.stringify({displayName: nameUserInput.val(),
-                      email: emailUserInput.val(), phone: phoneUserInput.val(), address: addressUserInput.val()}),
+                       body: JSON.stringify({displayName: nameUserInput.val(),email: emailUserInput.val(), phone: phoneUserInput.val(), address: addressUserInput.val()}),
                        headers: {"Content-Type": "application/json; charset=utf-8"}
                    })
                    .then((response) =>{
@@ -151,14 +133,10 @@
                        if(!data.error){
                            if(data.result.ok == 1 && data.result.n == 1){
                                 let ids = buildIDS(data.document);
-                                displaySupplier.append(buildTemplate(data.document,ids));
+                                display.append(buildTemplate(data.document,ids));
                                 editSupplier(data.document,ids);
                                 deleteSupplier(data.document,ids);
-                               // displayMessage(true, data.msg);
                             } 
-                       }
-                       else{
-                         // displayMessage(false,data.error.message);
                        }
                        resetSupplierInput();
                    });
