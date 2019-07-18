@@ -230,8 +230,8 @@
                                 deleteSupplier(data.document,ids);
                             } 
                        }
-                       modal.removeAttr("z-index");
-                       modal.display(none);
+                       modal.removeAttr("display");
+                       modal.attr("display","none");
                        closemodal.trigger("click");
                        //resetSupplierInput();
                        
