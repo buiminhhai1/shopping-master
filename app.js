@@ -22,9 +22,9 @@ const supplier = joi.object().keys({
   address: joi.string()
 });
 /////
+//mongodb+srv://admin:admin@cluster0-hs8pp.mongodb.net/ShoppingDB
 
-
-var uri = "mongodb+srv://admin:admin@cluster0-hs8pp.mongodb.net/ShoppingDB";
+var uri = "mongodb://localhost:27017/ShoppingDB";
 mongoose.connect(uri, {useNewUrlParser: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -71,6 +71,16 @@ app.get("/admin/getSupplier", (req,res) =>{
       res.json(documents);
     }
   });
+})
+
+// read one by id 
+app.get("/admin/supplier/:id", (req,res,next)=> {
+  const idSupplier = req.params.id;
+  db.collection("Supplier").findOne(ObjectID(idSupplier),(err,result)=>{
+    res.json(result);
+    console.log("value " + result);
+   
+  })
 })
 // Create supplier
 app.post("/admin/supplier",(req,res,next) =>{

@@ -36,7 +36,7 @@
 
     
             <%include newsupplierdialog%>
-
+            <%include editsupplierdialog%>
 
 
             <div class="row">
@@ -89,11 +89,18 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
         <script>
             $(document).ready(() =>{
-
+                // Còn bug nè, chỗ này nếu như người ta không nhập gì mà nhấn nút tạo mới thì nó bị mất hiệu ứng mờ, 
+                // BUGGGGG 
                 $('.closemodal').on('click',()=>{
                     $('#my-supplier-dialog-new').modal('toggle');
                     $(".modal-backdrop").remove();
                 })
+               
+                $('.closemodaledit').on('click',()=>{
+                    $('#my-supplier-dialog-edit').modal('toggle');
+                    $(".modal-backdrop").remove();
+                })
+                // BUGG bellow 
                
                 const display = $("#display") ;
                 const form = $("#form");
@@ -102,8 +109,17 @@
                 const phoneUserInput = $("#phoneUserInput");
                 const addressUserInput = $("#addressUserInput");
                 const closemodal = $("#closemodal");
-                
-                const modal = $("#my-supplier-dialog-new");
+
+                const editnameUserInput = $("#editnameUserInput");
+                const editemailUserInput = $("#editemailUserInput");
+                const editphoneUserInput = $("#editphoneUserInput");
+                const editaddressUserInput = $("#editaddressUserInput");
+                const editClose = $("#editclose");
+               
+                const editForm = $("#form-edit");
+
+                const modalNew = $("#my-supplier-dialog-new");
+                const modalEdit = $("#my-supplier-dialog-edit");
                 const getSupplier = () => {
                     fetch("/admin/getSupplier", {method: "get"})
                         .then(response => response.json())
@@ -122,7 +138,7 @@
                             <div class="col-md-3" id="${ids.emailphone}">${supplier.email}, ${supplier.phone}</div>
                             <div class="col-md-3" id="${ids.address}">${supplier.address}</div>
                             <div class="col-md-3 text-right">
-                                <button type="button" class="btn btn-secondary" id="${ids.editID}">Edit</button>
+                                <button type="button" class="btn btn-secondary" id="${ids.editID}" data-toggle="modal" data-target="#my-supplier-dialog-edit">Edit</button>
                                 <button type="button" class="btn btn-danger" id="${ids.deleteID}">Delete</button>
                             </div>
                         </div>
@@ -157,6 +173,7 @@
                    addressUserInput.val('');
                 }
 
+                // submit create supplier
                form.submit((e) =>{
                    e.preventDefault();
                    fetch("/admin/supplier", {
@@ -176,42 +193,64 @@
                                 deleteSupplier(data.document,ids);
                             } 
                        }
-                       modal.removeAttr("display");
-                       modal.attr("display","none");
+                       modalNew.removeAttr("display");
+                       modalNew.attr("display","none");
                        closemodal.trigger("click");
                        resetSupplierInput();
                        
                    });
-               });
+                });
+               
 
-               const editSupplier = (supplier, ids) => {
+                const editSupplier = (supplier, ids) => {
                 let editBtn = $(`#${ids.editID}`);
                 editBtn.click(()=>{
-                    fetch(`/admin/supplier/${supplier._id}`,{
-                        method: "put",
-                        headers: {"Content-Type": "application/json; charset=utf-8"},
-                        body: JSON.stringify({
-                            displayName: nameUserInput.val(),
-                            email: emailUserInput.val(),
-                            phone: phoneUserInput.val(),
-                            address: addressUserInput.val()
+                         fetch(`/admin/supplier/${supplier._id}`, {method: "get"})
+                        .then(response => response.json())
+                        .then(async(data)=>{
+                            await
+                            editaddressUserInput.val(`${data.address}`);
+                            editemailUserInput.val(`${data.email}`);
+                            editphoneUserInput.val(`${data.phone}`);
+                            editnameUserInput.val(`${data.displayName}`);
+                        });
+                        // after form shown and user input value and then click "Cap nhat" button
+                        // handle submit "Cap nhat" button
+                        editForm.submit((e) => {
+                            e.preventDefault();
+                            fetch(`/admin/supplier/${supplier._id}`,{
+                            method: "put",
+                            headers: {"Content-Type": "application/json; charset=utf-8"},
+                            body: JSON.stringify({
+                                displayName: editnameUserInput.val(),
+                                email: editemailUserInput.val(),
+                                phone: editphoneUserInput.val(),
+                                address: editaddressUserInput.val()
+                            })
+                        }).then((response)=>{
+                            return response.json();
+                        }).then((data)=>{
+                            if(data.ok == 1){
+                                // Display new data.
+                                let supplierIndex = $(`#${ids.supplierID}`);
+                                supplierIndex.html(data.value.displayName);
+                                let emailphone = $(`#${ids.emailphone}`);
+                                emailphone.html(data.value.email + ", " + data.value.phone);
+                                let phone = $(`#${ids.address}`);
+                                phone.html(data.value.address);
+
+                                // Hide modal
+                                modalNew.removeAttr("display");
+                                modalNew.attr("display","none");
+                                editClose.trigger("click");
+                               
+                            // get messsage here
+                            }else{
+                            // get message here
+                            }
+                        });
                         })
-                    }).then((response)=>{
-                        return response.json();
-                    }).then((data)=>{
-                        if(data.ok == 1){
-                            let supplierIndex = $(`#${ids.supplierID}`);
-                            supplierIndex.html(data.value.displayName);
-                            let emailphone = $(`#${ids.emailphone}`);
-                            emailphone.html(data.value.email + ", " + data.value.phone);
-                            let phone = $(`#${ids.address}`);
-                            phone.html(data.value.address);
-                            resetSupplierInput();
-                           // get messsage here
-                        }else{
-                         // get message here
-                        }
-                    });
+                   
                 });
                }
 
