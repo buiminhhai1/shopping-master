@@ -29,7 +29,7 @@
                         
                     </ul>
                     <form class="form-inline my-2 my-lg-0">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="button" 
+                        <button class="btn btn-outline-success my-2 my-sm-0" id="createNew" type="button" 
                         data-toggle="modal" data-target="#my-supplier-dialog-new">Tạo mới</button>
                     </form>
                 </div>
@@ -84,6 +84,8 @@
                // $('#example').DataTable();
                 // Còn bug nè, chỗ này nếu như người ta không nhập gì mà nhấn nút tạo mới thì nó bị mất hiệu ứng mờ, 
                 // BUGGGGG 
+
+                
                 $('.closemodal').on('click',()=>{
                     $('#my-supplier-dialog-new').modal('toggle');
                     $(".modal-backdrop").remove();
@@ -94,7 +96,12 @@
                     $(".modal-backdrop").remove();
                 })
                 // BUGG bellow 
-               
+
+                $(document).keyup(function(e) {
+                    if (e.key === "Escape") { // escape key maps to keycode `27`
+                        $(".modal-backdrop").remove();
+                    }
+                });
                 const display = $("#display") ;
                 const form = $("#form");
                 const nameUserInput = $("#nameUserInput");
@@ -120,6 +127,7 @@
                             displaySupplier(data);
                         });
                 }
+                
 
                getSupplier();
 
@@ -184,6 +192,7 @@
                    addressUserInput.val('');
                 }
 
+                
                 // submit create supplier
                form.submit((e) =>{
                    e.preventDefault();
@@ -207,11 +216,22 @@
                        modalNew.removeAttr("display");
                        modalNew.attr("display","none");
                        closemodal.trigger("click");
+                       $(".modal-backdrop").remove();
                        resetSupplierInput();
                        
                    });
                 });
                
+
+                
+                $('#createNew').click(()=>{
+                    setTimeout(() => {
+                        if(modalNew.hasClass('show')){
+                            modalNew.css("display","block");
+                        }
+                    
+                    }, 1000);
+                    })
 
                 const editSupplier = (supplier, ids) => {
                 let editBtn = $(`#${ids.editID}`);
@@ -224,9 +244,14 @@
                             editemailUserInput.val(`${data.email}`);
                             editphoneUserInput.val(`${data.phone}`);
                             editnameUserInput.val(`${data.displayName}`);
+
+                            // set style{display: -> block} 
+                            $("#my-supplier-dialog-edit").css("display","block");
                         });
+
                         // after form shown and user input value and then click "Cap nhat" button
                         // handle submit "Cap nhat" button
+
                         editForm.unbind("submit").submit((e) => {
                             e.preventDefault();
                             fetch(`/admin/supplier/${supplier._id}`,{
@@ -254,6 +279,7 @@
                                 modalNew.removeAttr("display");
                                 modalNew.attr("display","none");
                                 editClose.trigger("click");
+                                $(".modal-backdrop").remove();
                                
                             // get messsage here
                             }else{
