@@ -15,6 +15,7 @@
       <main class="page-content">
             
         <div class="container">
+            <!-- Navibar -->
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -34,54 +35,44 @@
                 </div>
             </nav>
 
-    
-            <%include newsupplierdialog%>
-            <%include editsupplierdialog%>
 
+        <%include newsupplierdialog%>
+        <%include editsupplierdialog%>
+        <!-- table -->
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nhà cung cấp</th>
+                <th scope="col">Email</th>
+                <th scope="col">Số điện thoại</th>
+                <th scope="col">Địa chỉ</th>
+                <th scope="col">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="display">
+            </tbody>
+        </table>
 
-            <div class="row">
-                <div id="temp" class="col-lg-1"></div>
-                <div class="col-lg-10">
-                    <!-- <form id="form">
-                        <div class="form-group">
-                            <label for="todo">Supplier</label>
-                            <input type="text" class="form-control" id="nameUserInput" placeholder="displayName">
-                            <input type="text" class="form-control" id="emailUserInput" placeholder="email">
-                            <input type="text" class="form-control" id="phoneUserInput" placeholder="phone">
-                            <input type="text" class="form-control" id="addressUserInput" placeholder="address">
-                            <br/>
-                            <button type="submit" class="btn btn-primary">Create</button>
-                        </div>
-                        
-                    </form> -->
-                </div>
-                <div class="col-lg-1"></div>
-            </div>
+        <!-- Pagination component -->
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li class="page-item ">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+                <li class="page-item active" ><a class="page-link" href="#">1</a></li>
+                <li class="page-item " aria-current="page">
+                <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>  
 
-       <div class="container">
-            
-            <div class="row">
-                <div class="col-lg-1"></div>
-                <div class="col-lg-10">
-                    <ul class="list-group" id="display">
-                    
-                    </ul>
-                </div>
-                <div class="col-lg-1"></div>
-            </div> 
-            <br>
-            <div class="row">
-                <div class="col-lg-1"></div>
-                <div class="col-lg-10">
-                    <div class="alert" role="alert" id="message">
-                        
-                    </div>
-                </div>
-                <div class="col-lg-1"></div>
-            </div>   
-          
-       
-        </div>
+  
+        
        <!-- Optional JavaScript -->
        <!-- JQuery First, then Popper.js, then Bootstrap Js-->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -89,6 +80,8 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
         <script>
             $(document).ready(() =>{
+
+               // $('#example').DataTable();
                 // Còn bug nè, chỗ này nếu như người ta không nhập gì mà nhấn nút tạo mới thì nó bị mất hiệu ứng mờ, 
                 // BUGGGGG 
                 $('.closemodal').on('click',()=>{
@@ -121,7 +114,7 @@
                 const modalNew = $("#my-supplier-dialog-new");
                 const modalEdit = $("#my-supplier-dialog-edit");
                 const getSupplier = () => {
-                    fetch("/admin/getSupplier", {method: "get"})
+                    fetch("/admin/getSupplier?pageNo=1&size=5", {method: "get"})
                         .then(response => response.json())
                         .then(data =>{
                             displaySupplier(data);
@@ -130,21 +123,39 @@
 
                getSupplier();
 
-               const buildTemplate = (supplier, ids) =>{
+             
+
+              const buildTemplate = (supplier, ids) =>{
                    return `
-                    <li class ="list-group-item" id ="${ids.listItemID}">
-                        <div class = "row">
-                            <div class = "col-md-3" id = "${ids.supplierID}">${supplier.displayName}</div> 
-                            <div class="col-md-3" id="${ids.emailphone}">${supplier.email}, ${supplier.phone}</div>
-                            <div class="col-md-3" id="${ids.address}">${supplier.address}</div>
-                            <div class="col-md-3 text-right">
+                   
+                   <tr id="${ids.listItemID}">
+                    <td>1</td>
+                    <td id="${ids.supplierID}">${supplier.displayName}</td>
+                    <td id="${ids.emailphone}">${supplier.email}</td>
+                    <td id="${ids.emailphone}">${supplier.phone}</td>
+                    <td class="text-wrap" id="${ids.address}">${supplier.address}</td>
+                    <td><div class="text-right">
                                 <button type="button" class="btn btn-secondary" id="${ids.editID}" data-toggle="modal" data-target="#my-supplier-dialog-edit">Edit</button>
                                 <button type="button" class="btn btn-danger" id="${ids.deleteID}">Delete</button>
-                            </div>
-                        </div>
-                    </li>
+                            </div> </td>
+                    </tr>
                    `;
                }
+            //    const buildTemplate = (supplier, ids) =>{
+            //        return `
+            //         <li class ="list-group-item" id ="${ids.listItemID}">
+            //             <div class = "row">
+            //                 <div class = "col-md-3" id = "${ids.supplierID}">${supplier.displayName}</div> 
+            //                 <div class="col-md-3" id="${ids.emailphone}">${supplier.email}, ${supplier.phone}</div>
+            //                 <div class="col-md-3" id="${ids.address}">${supplier.address}</div>
+            //                 <div class="col-md-3 text-right">
+            //                     <button type="button" class="btn btn-secondary" id="${ids.editID}" data-toggle="modal" data-target="#my-supplier-dialog-edit">Edit</button>
+            //                     <button type="button" class="btn btn-danger" id="${ids.deleteID}">Delete</button>
+            //                 </div>
+            //             </div>
+            //         </li>
+            //        `;
+            //    }
 
                const buildIDS = (supplier) => {
                    return {
@@ -216,7 +227,7 @@
                         });
                         // after form shown and user input value and then click "Cap nhat" button
                         // handle submit "Cap nhat" button
-                        editForm.submit((e) => {
+                        editForm.unbind("submit").submit((e) => {
                             e.preventDefault();
                             fetch(`/admin/supplier/${supplier._id}`,{
                             method: "put",

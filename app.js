@@ -22,9 +22,10 @@ const supplier = joi.object().keys({
   address: joi.string()
 });
 /////
-//mongodb+srv://admin:admin@cluster0-hs8pp.mongodb.net/ShoppingDB
+//
 
-var uri = "mongodb://localhost:27017/ShoppingDB";
+
+var uri = "mongodb+srv://admin:admin@cluster0-hs8pp.mongodb.net/ShoppingDB";
 mongoose.connect(uri, {useNewUrlParser: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -32,15 +33,6 @@ db.once('open', function() {
   console.log("database connected, the application listening on port 3003");
 });
 
-
-// //test write to database
-// db.collection("User").insert(  {id : "1"} 
-
-//     , function(err, result) {
-//     if (err) throw err;
-//     console.log(result);
-//     db.close();
-//   });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -62,9 +54,18 @@ const getPrimaryKey = (_id) => ObjectID(_id);
 app.get("/admin/supplier", (req,res,next) =>{
   res.render("admin/supplier/supplierlist");
 });
-// read
+// read admin/getSupplier?pageNo=<value>&size=<value>
 app.get("/admin/getSupplier", (req,res) =>{
-  db.collection("Supplier").find({}).toArray((err,documents) =>{
+  let pageNo = parseInt(req.query.pageNo);
+  let size = parseInt(req.query.size);
+  let query = {};
+  if(pageNo< 0 || pageNo ===0 ){
+    pageNo = 1;  
+  }
+  query.skip = size * (pageNo - 1);
+  query.limit = size;
+
+  db.collection("Supplier").find({},query).toArray((err,documents) =>{
     if(err){
       console.log("error get supplier " + err);
     } else {
