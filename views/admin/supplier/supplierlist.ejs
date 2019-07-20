@@ -3,7 +3,7 @@
 <html lang="en">
 
   <%include ../head%>
-
+    
   <body>
    
     <div class="page-wrapper chiller-theme toggled">
@@ -71,13 +71,18 @@
             </ul>
         </nav>  
 
-  
+        
+<div id="show_paginator" class="pagination"></div>
+
+<script type="text/javascript" src="http://botmonster.com/jquery-bootpag/jquery.bootpag.js"></script>
+<!-- <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> -->
         
        <!-- Optional JavaScript -->
-       <!-- JQuery First, then Popper.js, then Bootstrap Js-->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+       <!-- JQuery First, then Popper.js, then Bootstrap Js -->
+        <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        
         <script>
             $(document).ready(() =>{
 
@@ -102,6 +107,11 @@
                         $(".modal-backdrop").remove();
                     }
                 });
+
+                
+                
+
+
                 const display = $("#display") ;
                 const form = $("#form");
                 const nameUserInput = $("#nameUserInput");
@@ -120,16 +130,24 @@
 
                 const modalNew = $("#my-supplier-dialog-new");
                 const modalEdit = $("#my-supplier-dialog-edit");
-                const getSupplier = () => {
-                    fetch("/admin/getSupplier?pageNo=1&size=5", {method: "get"})
+                const getSupplier = (pageNo,size) => {
+                    fetch(`/admin/getSupplier?pageNo=${pageNo}&size=${size}`, {method: "get"})
                         .then(response => response.json())
                         .then(data =>{
-                            displaySupplier(data);
+                            displaySupplier(data,pageNo,size);
                         });
                 }
-                
+                getSupplier(1,3);
 
-               getSupplier();
+               $('#show_paginator').bootpag({
+                total: 10,
+                page: 1,
+                maxVisible: 3
+          }).on('page', function(event, num)
+          {
+            getSupplier(num,5);
+          });
+          
 
              
 
@@ -137,7 +155,7 @@
                    return `
                    
                    <tr id="${ids.listItemID}">
-                    <td>1</td>
+                    <td>${ids.stt}</td>
                     <td id="${ids.supplierID}">${supplier.displayName}</td>
                     <td id="${ids.emailphone}">${supplier.email}</td>
                     <td id="${ids.emailphone}">${supplier.phone}</td>
@@ -165,8 +183,9 @@
             //        `;
             //    }
 
-               const buildIDS = (supplier) => {
+               const buildIDS = (supplier,page,size,index) => {
                    return {
+                       stt: (page-1)*size+index+1,
                        listItemID: "listItem_" + supplier._id,
                        supplierID: "supplier_" + supplier._id,
                        emailphone: "emailphone_" + supplier._id,
@@ -176,9 +195,10 @@
                    }
                }
 
-               const displaySupplier = (data) => {
-                   data.forEach((supplier) => {
-                        let ids = buildIDS(supplier);
+               const displaySupplier = (data,page,size) => {
+                    display.empty();
+                   data.forEach((supplier,index) => {
+                        let ids = buildIDS(supplier,page,size,index);
                         display.append(buildTemplate(supplier,ids));
                         editSupplier(supplier, ids);
                         deleteSupplier(supplier, ids);
@@ -223,7 +243,8 @@
                 });
                
 
-                
+                // wait modalNew add class show, if modalNew has class show, in some case, style{display:none}
+                //therefore dialog not show
                 $('#createNew').click(()=>{
                     setTimeout(() => {
                         if(modalNew.hasClass('show')){

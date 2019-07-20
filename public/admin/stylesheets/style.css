@@ -61,6 +61,23 @@
       transition: all 0.3s ease;
     }
     
+        .bootpag li{
+            padding: 10px;
+            color: blue;
+            border: 1px solid #dee2e6;
+            line-height: 1.25;
+            display: block;
+            background-color: #fff;
+            padding: .5rem .75rem;
+            font-size: 
+        }
+        .bootpag .active {
+            background-color: #007bff;
+        }
+        .bootpag .active a{
+            color: #fff;
+        }
+
     /*----------------page-wrapper----------------*/
     
     .page-wrapper {
