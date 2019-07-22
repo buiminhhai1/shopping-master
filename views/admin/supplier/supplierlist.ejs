@@ -29,6 +29,7 @@
                         
                     </ul>
                     <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" id="myInput" type="search" placeholder="Search" aria-label="Search"  onkeyup="myFunction()">
                         <button class="btn btn-outline-success my-2 my-sm-0" id="createNew" type="button" 
                         data-toggle="modal" data-target="#my-supplier-dialog-new">Tạo mới</button>
                     </form>
@@ -38,8 +39,8 @@
 
         <%include newsupplierdialog%>
         <%include editsupplierdialog%>
-        <!-- table -->
-        <table class="table table-striped">
+        <!-- table --> 
+        <table id="myTable" class="table table-striped">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -55,42 +56,25 @@
         </table>
 
         <!-- Pagination component -->
-        <nav aria-label="...">
-            <ul class="pagination">
-                <li class="page-item ">
-                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
-                <li class="page-item active" ><a class="page-link" href="#">1</a></li>
-                <li class="page-item " aria-current="page">
-                <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>  
+        <div id="show_paginator" class="pagination"></div>
 
-        
-<div id="show_paginator" class="pagination"></div>
-
-<script type="text/javascript" src="http://botmonster.com/jquery-bootpag/jquery.bootpag.js"></script>
-<!-- <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> -->
-        
-       <!-- Optional JavaScript -->
-       <!-- JQuery First, then Popper.js, then Bootstrap Js -->
-        <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+        <script type="text/javascript" src="http://botmonster.com/jquery-bootpag/jquery.bootpag.js"></script>\
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
         
         <script>
+           
+           
             $(document).ready(() =>{
-
-               // $('#example').DataTable();
-                // Còn bug nè, chỗ này nếu như người ta không nhập gì mà nhấn nút tạo mới thì nó bị mất hiệu ứng mờ, 
-                // BUGGGGG 
-
-                
+                 // handle for filter.
+                $("#myInput").on("keyup", function() {
+                    var value = $(this).val().toLowerCase();
+                    $("#myTable tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+ 
+                // handle for create and edit button click
                 $('.closemodal').on('click',()=>{
                     $('#my-supplier-dialog-new').modal('toggle');
                     $(".modal-backdrop").remove();
@@ -100,18 +84,15 @@
                     $('#my-supplier-dialog-edit').modal('toggle');
                     $(".modal-backdrop").remove();
                 })
-                // BUGG bellow 
-
+              
                 $(document).keyup(function(e) {
                     if (e.key === "Escape") { // escape key maps to keycode `27`
                         $(".modal-backdrop").remove();
                     }
-                });
-
-                
-                
+                }); 
 
 
+                // variable for CRUD and Create, update form.
                 const display = $("#display") ;
                 const form = $("#form");
                 const nameUserInput = $("#nameUserInput");
@@ -137,16 +118,15 @@
                             displaySupplier(data,pageNo,size);
                         });
                 }
-                getSupplier(1,3);
+                getSupplier(1,5);
 
                $('#show_paginator').bootpag({
-                total: 10,
-                page: 1,
-                maxVisible: 3
-          }).on('page', function(event, num)
-          {
-            getSupplier(num,5);
-          });
+                    total: 10,
+                    page: 1,
+                    maxVisible: 5
+                }).on('page', function(event, num){
+                    getSupplier(num,5);
+                });
           
 
              
@@ -166,25 +146,10 @@
                             </div> </td>
                     </tr>
                    `;
-               }
-            //    const buildTemplate = (supplier, ids) =>{
-            //        return `
-            //         <li class ="list-group-item" id ="${ids.listItemID}">
-            //             <div class = "row">
-            //                 <div class = "col-md-3" id = "${ids.supplierID}">${supplier.displayName}</div> 
-            //                 <div class="col-md-3" id="${ids.emailphone}">${supplier.email}, ${supplier.phone}</div>
-            //                 <div class="col-md-3" id="${ids.address}">${supplier.address}</div>
-            //                 <div class="col-md-3 text-right">
-            //                     <button type="button" class="btn btn-secondary" id="${ids.editID}" data-toggle="modal" data-target="#my-supplier-dialog-edit">Edit</button>
-            //                     <button type="button" class="btn btn-danger" id="${ids.deleteID}">Delete</button>
-            //                 </div>
-            //             </div>
-            //         </li>
-            //        `;
-            //    }
-
-               const buildIDS = (supplier,page,size,index) => {
-                   return {
+                }
+         
+                const buildIDS = (supplier,page,size,index) => {
+                    return {
                        stt: (page-1)*size+index+1,
                        listItemID: "listItem_" + supplier._id,
                        supplierID: "supplier_" + supplier._id,
@@ -192,19 +157,21 @@
                        address: "address_" + supplier._id,
                        editID: "edit_" + supplier._id,
                        deleteID: "delete_" + supplier._id
-                   }
-               }
+                    }
+                }
 
-               const displaySupplier = (data,page,size) => {
+                // handle display Supplier.
+                const displaySupplier = (data,page,size) => {
                     display.empty();
-                   data.forEach((supplier,index) => {
+                    data.forEach((supplier,index) => {
                         let ids = buildIDS(supplier,page,size,index);
                         display.append(buildTemplate(supplier,ids));
                         editSupplier(supplier, ids);
                         deleteSupplier(supplier, ids);
-                   });
+                    });
                }
 
+               // handle reset supplier Input fields
                resetSupplierInput = () =>{ 
                    nameUserInput.val('');
                    emailUserInput.val('');
@@ -213,7 +180,7 @@
                 }
 
                 
-                // submit create supplier
+                // handle submit create supplier
                form.submit((e) =>{
                    e.preventDefault();
                    fetch("/admin/supplier", {
@@ -252,8 +219,9 @@
                         }
                     
                     }, 1000);
-                    })
-
+                })
+                
+                // handle edit Supplier
                 const editSupplier = (supplier, ids) => {
                 let editBtn = $(`#${ids.editID}`);
                 editBtn.click(()=>{
@@ -276,44 +244,44 @@
                         editForm.unbind("submit").submit((e) => {
                             e.preventDefault();
                             fetch(`/admin/supplier/${supplier._id}`,{
-                            method: "put",
-                            headers: {"Content-Type": "application/json; charset=utf-8"},
-                            body: JSON.stringify({
-                                displayName: editnameUserInput.val(),
-                                email: editemailUserInput.val(),
-                                phone: editphoneUserInput.val(),
-                                address: editaddressUserInput.val()
-                            })
-                        }).then((response)=>{
-                            return response.json();
-                        }).then((data)=>{
-                            if(data.ok == 1){
-                                // Display new data.
-                                let supplierIndex = $(`#${ids.supplierID}`);
-                                supplierIndex.html(data.value.displayName);
-                                let emailphone = $(`#${ids.emailphone}`);
-                                emailphone.html(data.value.email + ", " + data.value.phone);
-                                let phone = $(`#${ids.address}`);
-                                phone.html(data.value.address);
+                                method: "put",
+                                headers: {"Content-Type": "application/json; charset=utf-8"},
+                                body: JSON.stringify({
+                                    displayName: editnameUserInput.val(),
+                                    email: editemailUserInput.val(),
+                                    phone: editphoneUserInput.val(),
+                                    address: editaddressUserInput.val()
+                                })
+                            }).then((response)=>{
+                                return response.json();
+                            }).then((data)=>{
+                                if(data.ok == 1){
+                                    // Display new data.
+                                    let supplierIndex = $(`#${ids.supplierID}`);
+                                    supplierIndex.html(data.value.displayName);
+                                    let emailphone = $(`#${ids.emailphone}`);
+                                    emailphone.html(data.value.email + ", " + data.value.phone);
+                                    let phone = $(`#${ids.address}`);
+                                    phone.html(data.value.address);
 
-                                // Hide modal
-                                modalNew.removeAttr("display");
-                                modalNew.attr("display","none");
-                                editClose.trigger("click");
-                                $(".modal-backdrop").remove();
-                               
-                            // get messsage here
-                            }else{
-                            // get message here
-                            }
-                        });
+                                    // Hide modal
+                                    modalNew.removeAttr("display");
+                                    modalNew.attr("display","none");
+                                    editClose.trigger("click");
+                                    $(".modal-backdrop").remove();
+                                
+                                // get messsage here
+                                }else{
+                                // get message here
+                                }
+                            });
                         })
                    
-                });
-               }
+                    });
+                }
 
-
-               const deleteSupplier = (supplier, ids) =>{
+                // handle delete Supplier
+                const deleteSupplier = (supplier, ids) =>{
                    let deleteBtn = $(`#${ids.deleteID}`);
                    deleteBtn.click(() => {
                         fetch(`/admin/supplier/${supplier._id}`,{
@@ -327,6 +295,8 @@
                         });
                    });
                }
+            
+            
             });
         </script>
 
