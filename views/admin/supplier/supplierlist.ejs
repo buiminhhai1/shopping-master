@@ -91,17 +91,23 @@
                     }
                 }); 
 
+                 $(".custom-file-input").on("change", function() {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                });
 
                 // variable for CRUD and Create, update form.
                 const display = $("#display") ;
                 const form = $("#form");
                 const nameUserInput = $("#nameUserInput");
+                const avatarUserInput = $("#avatarUserInput");
                 const emailUserInput = $("#emailUserInput");
                 const phoneUserInput = $("#phoneUserInput");
                 const addressUserInput = $("#addressUserInput");
                 const closemodal = $("#closemodal");
 
                 const editnameUserInput = $("#editnameUserInput");
+                const editavatarUserInput = $("#editavatarUserInput");
                 const editemailUserInput = $("#editemailUserInput");
                 const editphoneUserInput = $("#editphoneUserInput");
                 const editaddressUserInput = $("#editaddressUserInput");
@@ -174,6 +180,8 @@
                // handle reset supplier Input fields
                resetSupplierInput = () =>{ 
                    nameUserInput.val('');
+                   $('.custom-file-label')[0].innerText='';
+                  $('#avatarUserInput').val('')
                    emailUserInput.val('');
                    phoneUserInput.val('');
                    addressUserInput.val('');
@@ -183,22 +191,28 @@
                 // handle submit create supplier
                form.submit((e) =>{
                    e.preventDefault();
-                   fetch("/admin/supplier", {
-                       method: 'post',
-                       body: JSON.stringify({displayName: nameUserInput.val(),email: emailUserInput.val(), phone: phoneUserInput.val(), address: addressUserInput.val()}),
-                       headers: {"Content-Type": "application/json; charset=utf-8"}
+                   var formd = $('#form')[0];
+                    var formData = new FormData(formd);
+                    var json = JSON.stringify({displayName: nameUserInput.val(),email: emailUserInput.val(), phone: phoneUserInput.val(), address: addressUserInput.val(),avatar: ''});
+                    formData.append('file', $('#avatarUserInput'));
+                    formData.append('data',json);
+                    fetch('/admin/supplier', {
+                    method: 'POST',
+                    body: formData
+                       //body: JSON.stringify({displayName: nameUserInput.val(),email: emailUserInput.val(), phone: phoneUserInput.val(), address: addressUserInput.val()}),
+                    //    headers: {"Content-Type": "application/json; charset=utf-8"}
                    })
                    .then((response) =>{
                        return response.json();
                    })
                    .then(data =>{
                        if(!data.error){
-                           if(data.result.ok == 1 && data.result.n == 1){
-                                let ids = buildIDS(data.document);
-                                display.append(buildTemplate(data.document,ids));
-                                editSupplier(data.document,ids);
-                                deleteSupplier(data.document,ids);
-                            } 
+                        //    if(data.result.ok == 1 && data.result.n == 1){
+                        //         let ids = buildIDS(data.document);
+                        //         display.append(buildTemplate(data.document,ids));
+                        //         editSupplier(data.document,ids);
+                        //         deleteSupplier(data.document,ids);
+                        //     } 
                        }
                        modalNew.removeAttr("display");
                        modalNew.attr("display","none");
@@ -208,7 +222,6 @@
                        
                    });
                 });
-               
 
                 // wait modalNew add class show, if modalNew has class show, in some case, style{display:none}
                 //therefore dialog not show
@@ -233,6 +246,8 @@
                             editemailUserInput.val(`${data.email}`);
                             editphoneUserInput.val(`${data.phone}`);
                             editnameUserInput.val(`${data.displayName}`);
+                            // editavatarUserInput.val(`${data.avatar}`);
+                            $('.custom-file-label')[1].innerText=`${data.avatar}`;
 
                             // set style{display: -> block} 
                             $("#my-supplier-dialog-edit").css("display","block");
@@ -243,15 +258,21 @@
 
                         editForm.unbind("submit").submit((e) => {
                             e.preventDefault();
-                            fetch(`/admin/supplier/${supplier._id}`,{
-                                method: "put",
-                                headers: {"Content-Type": "application/json; charset=utf-8"},
-                                body: JSON.stringify({
+                            let formd = $('#form-edit')[0];
+                            let formData = new FormData(formd);
+                            let json = JSON.stringify({
                                     displayName: editnameUserInput.val(),
+                                    avatar: $('.custom-file-label')[1].innerText,
                                     email: editemailUserInput.val(),
                                     phone: editphoneUserInput.val(),
                                     address: editaddressUserInput.val()
-                                })
+                                });
+                            formData.append('file', $('#editavatarUserInput'));
+                            formData.append('data',json); 
+                            fetch(`/admin/supplier/${supplier._id}`,{
+                                method: "put",
+                                // headers: {"Content-Type": "application/json; charset=utf-8"},
+                                body: formData
                             }).then((response)=>{
                                 return response.json();
                             }).then((data)=>{
@@ -263,7 +284,7 @@
                                     emailphone.html(data.value.email + ", " + data.value.phone);
                                     let phone = $(`#${ids.address}`);
                                     phone.html(data.value.address);
-
+                                    
                                     // Hide modal
                                     modalNew.removeAttr("display");
                                     modalNew.attr("display","none");

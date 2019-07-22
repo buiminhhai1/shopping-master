@@ -15,16 +15,53 @@ const joi = require("joi");
 const bodyParser = require("body-parser");
 var app = express();
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
 
 const supplier = joi.object().keys({
   displayName: joi.string(),
   email: joi.string(),
   phone: joi.string(),
-  address: joi.string()
+  address: joi.string(),
+  avatar:joi.string()
 });
 /////
 //
 
+
+// Set The Storage Engine
+const storage = multer.diskStorage({
+  destination: './public/admin/uploads/',
+  filename: function(req, file, cb){
+    cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+// Init Upload
+const upload = multer({
+  storage: storage,
+  limits:{fileSize: 1000000},
+  fileFilter: function(req, file, cb){
+    checkFileType(file, cb);
+  }
+}).single('myImage');
+
+// Check File Type
+function checkFileType(file, cb){
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
+
+  if(mimetype && extname){
+    return cb(null,true);
+  } else {
+    cb('Error: Images Only!');
+  }
+}
 
 var uri = "mongodb+srv://admin:admin@cluster0-hs8pp.mongodb.net/ShoppingDB";
 mongoose.connect(uri, {useNewUrlParser: true});
@@ -85,10 +122,16 @@ app.get("/admin/supplier/:id", (req,res,next)=> {
   })
 })
 // Create supplier
-app.post("/admin/supplier",(req,res,next) =>{
+app.post("/admin/supplier",upload,(req,res,next) =>{
+    console.log("acces appjs!!!!!!!!!!!");
     
-    const objSupplier = req.body;
-  
+    const objSupplier = JSON.parse(req.body.data);
+    
+    if(req.file){
+      objSupplier.avatar =  req.file.filename; 
+    }
+    console.log(objSupplier);
+
     joi.validate(objSupplier,supplier, (err,result) =>{
       if(err){
         const error = new Error("Invalid Input");
@@ -107,16 +150,22 @@ app.post("/admin/supplier",(req,res,next) =>{
         });
       }
     })
+
 });
 // Update supplier 
-app.put("/admin/supplier/:id", (req,res) =>{
+app.put("/admin/supplier/:id",upload, (req,res) =>{
   const supplierID = req.params.id;
 
-  const supplierInput = req.body;
+  const supplierInput = JSON.parse(req.body.data);
+
+    if(req.file){
+      supplierInput.avatar =  req.file.filename; 
+    }
+  console.log(supplierInput);
   
   // Find document by Id and Update 
   db.collection("Supplier").findOneAndUpdate({_id: getPrimaryKey(supplierID)},
-  {$set: {displayName: supplierInput.displayName, email: supplierInput.email, phone: supplierInput.phone, address: supplierInput.address}},
+  {$set: {avatar:supplierInput.avatar, displayName: supplierInput.displayName, email: supplierInput.email, phone: supplierInput.phone, address: supplierInput.address}},
   {returnOriginal: false}, 
   (err,result) =>{
     if(err){
@@ -137,65 +186,6 @@ app.delete("/admin/supplier/:id", (req,res) =>{
       console.log("err delete is " + err)
       else 
       res.json(result);
-  });
-});
-
-
-
-// Set The Storage Engine
-const storage = multer.diskStorage({
-  destination: './public/admin/uploads/',
-  filename: function(req, file, cb){
-    cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-  }
-});
-
-// Init Upload
-const upload = multer({
-  storage: storage,
-  limits:{fileSize: 1000000},
-  fileFilter: function(req, file, cb){
-    checkFileType(file, cb);
-  }
-}).single('myImage');
-
-// Check File Type
-function checkFileType(file, cb){
-  // Allowed ext
-  const filetypes = /jpeg|jpg|png|gif/;
-  // Check ext
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  // Check mime
-  const mimetype = filetypes.test(file.mimetype);
-
-  if(mimetype && extname){
-    return cb(null,true);
-  } else {
-    cb('Error: Images Only!');
-  }
-}
-
-
-app.get('/upload', (req, res) => res.render('admin/supplier/testuploadimage'));
-
-app.post('/upload', (req, res) => {
-  upload(req, res, (err) => {
-    if(err){
-      res.render('admin/supplier/testuploadimage', {
-        msg: err
-      });
-    } else {
-      if(req.file == undefined){
-        res.render('admin/supplier/testuploadimage', {
-          msg: 'Error: No File Selected!'
-        });
-      } else {
-        res.render('admin/supplier/testuploadimage', {
-          msg: 'File Uploaded!',
-          file: `admin/uploads/${req.file.filename}`
-        });
-      }
-    }
   });
 });
 

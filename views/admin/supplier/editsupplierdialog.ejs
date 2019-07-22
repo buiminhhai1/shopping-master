@@ -4,7 +4,7 @@
 			<div class="modal-header">
 				<h3>Cập nhật nhà cung cấp</h2>
 			</div>
-			<form id="form-edit">
+			<form id="form-edit" method="put" enctype="multipart/form-data">
 				<div class="modal-body ">
 					<div class="form-row">
 						<div class="col-md-7 col-mb-1">
@@ -12,15 +12,17 @@
 							<input type="text" class="form-control" id="editnameUserInput" value="" placeholder="Tên nhà cung cấp" required/>
 						</div>
 					</div>
+					<div class="file-field input-field"></div>
 					<div class="form-row">
 						<div class="col-md-12">
 							<label for="new-supplier-avatar">Ảnh đại diện</label>
 							<div class="custom-file">
-								<input type="file" class="custom-file-input" id="new-supplier-avatar"/>
+								<input type="file" name="myImage" class="custom-file-input" id="editavatarUserInput"/>
 								<label class="custom-file-label" for="new-supplier-avatar">Choose file</label>
 							</div>
 						</div>
 					</div>
+
 					<div class="form-row">
 						<div class="col-md-12">
 							<label for="editemailUserInput">Email</label>

@@ -4,7 +4,7 @@
 			<div class="modal-header">
 				<h3>Thêm mới nhà cung cấp</h2>
 			</div>
-			<form id="form">
+			<form id="form" method="POST" enctype="multipart/form-data">
 				<div class="modal-body ">
 					<div class="form-row">
 						<div class="col-md-7 col-mb-1">
@@ -16,7 +16,7 @@
 						<div class="col-md-12">
 							<label for="new-supplier-avatar">Ảnh đại diện</label>
 							<div class="custom-file">
-								<input type="file" class="custom-file-input" id="new-supplier-avatar"/>
+								<input type="file" name="myImage" class="custom-file-input" id="avatarUserInput"/>
 								<label class="custom-file-label" for="new-supplier-avatar">Choose file</label>
 							</div>
 						</div>
